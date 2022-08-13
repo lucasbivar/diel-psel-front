@@ -1,0 +1,40 @@
+#addBtn {
+  position: fixed;
+  right: 4rem;
+  bottom: 3rem;
+  display:block;
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  background: #181842;
+  text-align: center;
+  padding-top: 16px;
+  -webkit-box-shadow: 16px 16px 46px -6px #000000; 
+  /* box-shadow: 0px 10px 13px -7px #000000, 26px 21px 46px -2px #000000; */
+}
+
+#addBtn:hover {
+  background:#0b0b35;
+  margin-bottom: 3px;
+}
+
+#addIcon {
+  color: white;
+}
+
+@media only screen and (max-width: 400px) {
+  #addBtn {
+    right: 2rem;
+    bottom: 2rem;
+    height: 45px;
+    width: 45px;
+    padding-top: 10px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #addBtn {
+    right: 2rem;
+    bottom: 2rem;
+  }
+}
