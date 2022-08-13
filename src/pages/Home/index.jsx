@@ -15,7 +15,7 @@ export const Home = () => {
       <Header currPage="tasks" />
       <Flex justify="center" min-width="100vw" minHeight="calc(100vh - 60px)">
 
-        <Stack spacing="16px">
+        <Stack spacing="16px" paddingBottom="30px">
           <Flex
             direction="row"
             justify="space-between"

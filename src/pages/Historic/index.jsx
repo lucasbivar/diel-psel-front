@@ -11,7 +11,7 @@ export const Historic = () => {
     <Box min-width="100vw">
       <Header currPage="historic" />
       <Flex justify="center" min-width="100vw" minHeight="calc(100vh - 60px)">
-        <Stack spacing="16px">
+        <Stack spacing="16px" paddingBottom="30px">
           {[...Array(61)].map((x, i) => (
             <Task
               title="Lorem Ipsum Lorem Ipsum..."
