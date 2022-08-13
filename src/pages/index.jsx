@@ -15,7 +15,7 @@ export function MainRoutes() {
       <Route path="/detalhes/:id" element={<Details />} />
       <Route path="/editar/:id" element={<Edit />} />
       <Route path="/historico" element={<Historic />} />
-      <Route path="*" element={<Error />} />
+      <Route path="/*" element={<Error />} />
     </Routes>
 
   );
