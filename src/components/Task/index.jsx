@@ -28,6 +28,16 @@ export const Task = ({
   const handleStatus = () => {
     setDone(!done);
   };
+
+  const getBorderColor = () => {
+    if (status === 'Deleted') {
+      return '18px solid #C90000';
+    }
+    if (done) {
+      return '18px solid green';
+    }
+    return '18px solid #181842';
+  };
   return (
     <MotionBox>
       <Flex
@@ -45,7 +55,7 @@ export const Task = ({
         justify="space-between"
         px="2rem"
         borderRadius="7px"
-        borderLeft={status === 'Deleted' ? '18px solid #C90000' : '18px solid #181842'}
+        borderLeft={getBorderColor()}
         boxShadow="2px 0px 8px 2px rgba(0,0,0,0.16)"
         _hover={{ backgroundColor: '#f5f5f5' }}
         onClick={status !== 'Deleted' ? goToDetails : null}
@@ -59,6 +69,7 @@ export const Task = ({
               fontSize={{
                 base: '0.9rem', lg: '1rem', nb: '1rem',
               }}
+              textDecoration={done ? 'line-through' : null}
             >
               {title}
 
