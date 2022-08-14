@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:2000/api',
+  baseURL: 'https://task-back-diel.herokuapp.com/api',
 });
 
 export const getTasks = async () => {
@@ -22,13 +22,41 @@ export const deleteTask = async (id) => {
   return data;
 };
 
-export const editTask = async (id, params = {}) => {
+export const editTaskStatus = async (id, params = {}) => {
   const { data } = await axiosInstance.patch(`/task/${id}`, params);
 
   return data;
 };
 
+export const editTask = async (id, params = {}) => {
+  const taskData = params;
+
+  taskData.duration = (taskData.hour * 60) + taskData.minute;
+  const date = new Date(`${taskData.date}T${taskData.time}:00`);
+  taskData.dateTime = date;
+
+  delete taskData.hour;
+  delete taskData.minute;
+  delete taskData.time;
+  delete taskData.date;
+
+  const { data } = await axiosInstance.patch(`/task/${id}`, taskData);
+
+  return data;
+};
+
 export const createTask = async (params = {}) => {
+  const taskData = params;
+
+  taskData.duration = (taskData.hour * 60) + taskData.minute;
+  const date = new Date(`${taskData.date}T${taskData.time}:00`);
+  taskData.dateTime = date;
+
+  delete taskData.hour;
+  delete taskData.minute;
+  delete taskData.time;
+  delete taskData.date;
+
   const { data } = await axiosInstance.post('/task', params);
 
   return data;

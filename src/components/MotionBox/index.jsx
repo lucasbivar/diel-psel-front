@@ -13,7 +13,7 @@ export function MotionBox({ children, ...rest }) {
       exit={{ x: -700, opacity: 0 }}
       // @ts-ignore no problem in operation, although type error appears.
       transition={{
-        duration: 1,
+        duration: 0.7,
         ease: 'easeInOut',
       }}
       {...rest}

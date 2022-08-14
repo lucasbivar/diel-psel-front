@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 import {
-  Box, Flex, Stack, Input, FormLabel, Textarea, FormControl, Button, Select, HStack, Heading, FormErrorMessage,
+  Box, Flex, Stack, Input, FormLabel, Textarea, FormControl,
+  Button, Select, HStack, Heading, FormErrorMessage, useToast,
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
@@ -54,80 +55,172 @@ export const Create = () => {
 
   const onSubmit = async (data) => {
     await mutateAsync(data);
-    navigate('/');
   };
+
+  const toast = useToast();
+
+  if (isSuccess) {
+    const idToastSuccess = 'success';
+    if (!toast.isActive(idToastSuccess)) {
+      toast({
+        id: idToastSuccess,
+        title: 'Tarefa criada com sucesso.',
+        status: 'success',
+        position: 'bottom-right',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    navigate('/');
+  }
+
+  if (error) {
+    const idToastError = 'error';
+
+    if (!toast.isActive(idToastError)) {
+      toast({
+        id: idToastError,
+        title: 'Erro ao criar tarefa.',
+        status: 'error',
+        position: 'bottom-right',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+
   return (
 
     <Box min-width="100vw">
       <Header />
-      <Flex justify="center" marginTop="20px" marginBottom="20px" min-width="100vw" minHeight="calc(100vh - 60px)">
-        <Stack spacing="1rem" width={{ base: '75%', lg: '50%' }}>
+      <Flex
+        justify="center"
+        marginTop="20px"
+        marginBottom="20px"
+        min-width="100vw"
+        minHeight="calc(100vh - 60px)"
+      >
+        <Stack
+          spacing="1rem"
+          width={{ base: '75%', lg: '50%' }}
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Heading>NOVA TAREFA</Heading>
 
-          <FormControl isRequired>
-            <FormLabel>Título:</FormLabel>
+          <FormControl isInvalid={errors.title}>
+            <FormLabel htmlFor="title">Título:</FormLabel>
             <Input
-              focusBorderColor="primary"
+              type="text"
+              focusBorderColor={errors.title ? 'red.500' : 'primary'}
               placeholder="Digite o título da tarefa"
               {...register('title')}
-              errors={errors.title}
             />
+            {errors.title
+              && (
+              <FormErrorMessage>
+                {errors.title.message}
+              </FormErrorMessage>
+              )}
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Data:</FormLabel>
+          <FormControl isInvalid={errors.date}>
+            <FormLabel htmlFor="date">Data:</FormLabel>
             <Input
-              {...register('date')}
               errors={errors.date}
               type="date"
+              focusBorderColor={errors.date ? 'red.500' : 'primary'}
               min={getCurrentDate()}
+              {...register('date')}
             />
-
+            {errors.date
+              && (
+              <FormErrorMessage>
+                {errors.date.message}
+              </FormErrorMessage>
+              )}
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Horário:</FormLabel>
+
+          <FormControl isInvalid={errors.time}>
+            <FormLabel htmlFor="time">Horário:</FormLabel>
             <Input
-              {...register('time')}
               errors={errors.time}
               min={getCurrentDate()}
-              focusBorderColor="primary"
+              focusBorderColor={errors.time ? 'red.500' : 'primary'}
               type="time"
+              {...register('time')}
             />
+            {errors.time
+              && (
+              <FormErrorMessage>
+                {errors.time.message}
+              </FormErrorMessage>
+              )}
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Duração:</FormLabel>
-            <Stack>
-              <Select
-                {...register('hour')}
-                errors={errors.hour}
-                focusBorderColor="primary"
-                placeholder="Quantidade de Horas"
-              >
-                {[...Array(25)].map((x, i) => <option value={i}>{i}</option>)}
 
-              </Select>
-              <Select
-                {...register('minute')}
-                errors={errors.minute}
-                focusBorderColor="primary"
-                placeholder="Quantidade de Minutos"
-              >
-                {[...Array(61)].map((x, i) => <option value={i}>{i}</option>)}
-              </Select>
-            </Stack>
+          <FormControl isInvalid={errors.hour}>
+            <FormLabel htmlFor="hour">Duração:</FormLabel>
+            <Select
+              errors={errors.hour}
+              focusBorderColor={errors.hour ? 'red.500' : 'primary'}
+              placeholder="Quantidade de Horas"
+              {...register('hour')}
+            >
+              {[...Array(25)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+            </Select>
+            {errors.hour
+              && (
+              <FormErrorMessage>
+                {errors.hour.message}
+              </FormErrorMessage>
+              )}
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Descrição:</FormLabel>
+          <FormControl isInvalid={errors.minute}>
+            <FormLabel htmlFor="hour" />
+            <Select
+              {...register('minute')}
+              errors={errors.minute}
+              focusBorderColor={errors.minute ? 'red.500' : 'primary'}
+              placeholder="Quantidade de Minutos"
+            >
+              {[...Array(60)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+            </Select>
+
+            {errors.minute
+              && (
+              <FormErrorMessage>
+                {errors.minute.message}
+              </FormErrorMessage>
+              )}
+          </FormControl>
+
+          <FormControl isInvalid={errors.description}>
+            <FormLabel htmlFor="description">Descrição:</FormLabel>
             <Textarea
               {...register('description')}
               errors={errors.description}
-              focusBorderColor="primary"
+              minHeight="250px"
+              focusBorderColor={errors.description ? 'red.500' : 'primary'}
               placeholder="Descreva a sua tarefa"
             />
+            {errors.description
+              && (
+              <FormErrorMessage>
+                {errors.description.message}
+              </FormErrorMessage>
+              )}
           </FormControl>
           <HStack width="100%">
-            <Button width="70%" colorScheme="brand">Criar Tarefa</Button>
+            <Button
+              width="70%"
+              type="submit"
+              isLoading={isLoading}
+              colorScheme="brand"
+            >
+              Criar Tarefa
 
-            <Link to="/" width="30%"><Button width="100%" colorScheme="brand">Voltar</Button></Link>
+            </Button>
+
+            <Button onClick={() => navigate('/')} width="30%" colorScheme="brand">Voltar</Button>
           </HStack>
         </Stack>
       </Flex>

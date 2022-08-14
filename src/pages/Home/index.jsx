@@ -43,32 +43,39 @@ export const Home = () => {
               </InputLeftElement>
               <Input borderColor="primary" border="2px" focusBorderColor="primary" type="tel" placeholder="Tarefa" />
             </InputGroup>
-            <Select width="28%" color="white" focusBorderColor="primary" borderColor="primary" bg="primary">
+            <Select width="28%" fontSize={{ base: '0.7rem', md: '1rem' }} color="white" focusBorderColor="primary" borderColor="primary" bg="primary">
               <option style={{ color: '#181842' }} value="filtro" selected>Filtro</option>
               <option style={{ color: '#181842' }} value="dia">Dia</option>
               <option style={{ color: '#181842' }} value="semana">Semana</option>
               <option style={{ color: '#181842' }} value="mes">Mês</option>
             </Select>
           </Flex>
-          {isLoading ? <Heading>Loading</Heading>
-            : data?.filter(({
-              status,
-            }) => status !== 'Deleted').map(({
-              title, description, _id, date, time, durationToString, status,
-            }) => {
-              return (
-                <Task
-                  title={title}
-                  description={description}
-                  date={date}
-                  time={time}
-                  duration={durationToString}
-                  id={_id}
-                  status={status}
-                  key={_id}
-                />
-              );
-            })}
+          {data?.filter(({
+            status,
+          }) => status !== 'Deleted').length === 0 ? (
+            <Flex width="100%" justify="center">
+              <Heading fontSize={{ base: '0.9rem', md: '1.2rem' }}>Ainda Não Foi Criada Nenhuma Tarefa</Heading>
+            </Flex>
+            ) : null }
+
+          {data?.filter(({
+            status,
+          }) => status !== 'Deleted').map(({
+            title, description, _id, date, time, durationToString, status,
+          }) => {
+            return (
+              <Task
+                title={title}
+                description={description}
+                date={date}
+                time={time}
+                duration={durationToString}
+                id={_id}
+                status={status}
+                key={_id}
+              />
+            );
+          })}
 
         </Stack>
 

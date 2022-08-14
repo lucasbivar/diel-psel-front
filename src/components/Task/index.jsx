@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-return-await */
 import {
-  Checkbox, Flex, Heading, IconButton, Text, Box,
+  Checkbox, Flex, Heading, IconButton, Text, Box, useQuery, useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,10 +14,11 @@ import { useNavigate } from 'react-router-dom';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { MotionBox } from '../MotionBox';
-import { editTask, getTaskById } from '../../api';
+import {
+  deleteTask, editTask, editTaskStatus, getTaskById,
+} from '../../api';
 import { queryClient } from '../../main';
 
-// Lorem Ipsum Lorem Ipsum...
 export const Task = ({
   title, description, date, time, duration, status, id,
 }) => {
@@ -38,9 +39,72 @@ export const Task = ({
     navigate(`/detalhes/${id}`);
   };
 
+  const toast = useToast();
   const [done, setDone] = useState(status === 'Done');
   const handleStatus = () => {
+    editTaskStatus(id, { status: (status === 'Done' ? 'ToDo' : 'Done') });
+    queryClient.invalidateQueries('todo');
+    if (!done) {
+      const idToastDone = 'done';
+      if (!toast.isActive(idToastDone)) {
+        toast({
+          id: idToastDone,
+          title: 'Tarefa marcada como realizada.',
+          status: 'success',
+          position: 'bottom-right',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } else {
+      const idToastToDo = 'ToDo';
+      if (!toast.isActive(idToastToDo)) {
+        toast({
+          id: idToastToDo,
+          title: 'Tarefa marcada como pendente.',
+          status: 'success',
+          position: 'bottom-right',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
+
     setDone(!done);
+  };
+
+  const handleDelete = () => {
+    deleteTask(id);
+    queryClient.invalidateQueries('todo');
+    const idToastSuccess = 'success';
+    if (!toast.isActive(idToastSuccess)) {
+      toast({
+        id: idToastSuccess,
+        title: 'Tarefa deletada com sucesso.',
+        status: 'success',
+        position: 'bottom-right',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleRecovery = async () => {
+    await editTaskStatus(id, { status: 'ToDo' });
+
+    const idToastSuccess = 'success';
+    if (!toast.isActive(idToastSuccess)) {
+      toast({
+        id: idToastSuccess,
+        title: 'Tarefa recuperada com sucesso.',
+        status: 'success',
+        position: 'bottom-right',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    queryClient.invalidateQueries('todo');
+    navigate('/');
   };
 
   const getBorderColor = () => {
@@ -107,7 +171,7 @@ export const Task = ({
 
         </Flex>
         <Flex justify="space-between" align="center" direction={{ base: 'column', lg: 'row' }} width={status === 'Deleted' ? '5%' : '20%'}>
-          {status === 'Deleted' ? (<IconButton _hover={{ backgroundColor: 'transparent' }} size="sm" bgColor="transparent" icon={<ReplayIcon style={{ color: '#181842' }} />} />)
+          {status === 'Deleted' ? (<IconButton _hover={{ backgroundColor: 'transparent' }} onClick={handleRecovery} size="sm" bgColor="transparent" icon={<ReplayIcon style={{ color: '#181842' }} />} />)
             : (
               <>
                 <IconButton
@@ -132,7 +196,16 @@ export const Task = ({
                   bgColor="transparent"
                   icon={<EditIcon style={{ color: '#181842' }} />}
                 />
-                <IconButton _hover={{ backgroundColor: 'transparent' }} size="sm" bgColor="transparent" icon={<DeleteIcon style={{ color: '#181842' }} />} />
+                <IconButton
+                  _hover={{ backgroundColor: 'transparent' }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete();
+                  }}
+                  size="sm"
+                  bgColor="transparent"
+                  icon={<DeleteIcon style={{ color: '#181842' }} />}
+                />
               </>
             )}
         </Flex>

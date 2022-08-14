@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import App from './App';
 import { theme } from './styles/theme';
+import ScrollToTop from './utils/scrollToTop';
 
 export const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ReactQueryDevtools />
       <ChakraProvider theme={theme}>
         <BrowserRouter>
+          <ScrollToTop />
           <App />
         </BrowserRouter>
       </ChakraProvider>
