@@ -41,8 +41,8 @@ export const Task = ({
 
   const toast = useToast();
   const [done, setDone] = useState(status === 'Done');
-  const handleStatus = () => {
-    editTaskStatus(id, { status: (status === 'Done' ? 'ToDo' : 'Done') });
+  const handleStatus = async () => {
+    await editTaskStatus(id, { status: (status === 'Done' ? 'ToDo' : 'Done') });
     queryClient.invalidateQueries('todo');
     if (!done) {
       const idToastDone = 'done';
@@ -73,9 +73,10 @@ export const Task = ({
     setDone(!done);
   };
 
-  const handleDelete = () => {
-    deleteTask(id);
+  const handleDelete = async () => {
+    await deleteTask(id);
     queryClient.invalidateQueries('todo');
+
     const idToastSuccess = 'success';
     if (!toast.isActive(idToastSuccess)) {
       toast({
