@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable no-return-await */
 import {
   Checkbox, Flex, Heading, IconButton, Text, Box,
 } from '@chakra-ui/react';
@@ -12,7 +14,10 @@ import { useNavigate } from 'react-router-dom';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { MotionBox } from '../MotionBox';
+import { editTask, getTaskById } from '../../api';
+import { queryClient } from '../../main';
 
+// Lorem Ipsum Lorem Ipsum...
 export const Task = ({
   title, description, date, time, duration, status, id,
 }) => {
@@ -20,11 +25,20 @@ export const Task = ({
   const goToEdit = () => {
     navigate(`/editar/${id}`);
   };
+
+  const handlePrefetchTask = async (taskID) => {
+    return await queryClient.prefetchQuery(['todo', { id: taskID }], async () => {
+      const { tasks } = await getTaskById(taskID);
+      return tasks;
+    }, {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+    });
+  };
   const goToDetails = () => {
     navigate(`/detalhes/${id}`);
   };
-  const [done, setDone] = useState(status === 'Done');
 
+  const [done, setDone] = useState(status === 'Done');
   const handleStatus = () => {
     setDone(!done);
   };
@@ -59,7 +73,7 @@ export const Task = ({
         boxShadow="2px 0px 8px 2px rgba(0,0,0,0.16)"
         _hover={{ backgroundColor: '#f5f5f5' }}
         onClick={status !== 'Deleted' ? goToDetails : null}
-
+        onMouseEnter={() => (status !== 'Deleted' ? handlePrefetchTask(id) : null)}
       >
         <Flex width="70%" justify="space-between">
           <Flex direction="column" width="100%">

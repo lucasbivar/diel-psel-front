@@ -1,15 +1,26 @@
+/* eslint-disable import/no-cycle */
 import {
-  Box, Button, Flex, Heading, Input, InputGroup, InputLeftElement, Select, Stack,
+  Box, Flex, Heading, Input, InputGroup, InputLeftElement, Select, Stack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { Header } from '../../components/Header';
 import './style.css';
 import { Task } from '../../components/Task';
 import { MotionBox } from '../../components/MotionBox';
+import { getTasks } from '../../api';
 
 export const Home = () => {
+  const { data, isLoading } = useQuery(['todo'], async () => {
+    const { tasks } = await getTasks();
+
+    return tasks;
+  }, {
+    staleTime: 5000,
+  });
+
   return (
     <Box min-width="100vw">
       <Header currPage="tasks" />
@@ -39,23 +50,32 @@ export const Home = () => {
               <option style={{ color: '#181842' }} value="mes">Mês</option>
             </Select>
           </Flex>
-          {[...Array(61)].map((x, i) => (
-            <Task
-              title="Lorem Ipsum Lorem Ipsum..."
-              description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, aliquam! Facilis quia beatae quisquam officiis minima ab voluptatum, itaque obcaecati."
-              date="10/08/2022"
-              time="13:04"
-              duration="1h 23m"
-              id={i}
-            />
-          ))}
+          {isLoading ? <Heading>Loading</Heading>
+            : data?.filter(({
+              status,
+            }) => status !== 'Deleted').map(({
+              title, description, _id, date, time, durationToString, status,
+            }) => {
+              return (
+                <Task
+                  title={title}
+                  description={description}
+                  date={date}
+                  time={time}
+                  duration={durationToString}
+                  id={_id}
+                  status={status}
+                  key={_id}
+                />
+              );
+            })}
 
         </Stack>
 
         <MotionBox>
-          <a href="criar" id="addBtn">
+          <Link to="/criar" id="addBtn">
             <AddIcon id="addIcon" />
-          </a>
+          </Link>
         </MotionBox>
       </Flex>
     </Box>

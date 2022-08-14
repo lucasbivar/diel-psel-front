@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  Flex, Image, Link, Text,
+  Flex, Image, Text,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import dielLogo from '../../assets/icon.svg';
 
 export const Header = ({ currPage }) => {
@@ -29,8 +29,8 @@ export const Header = ({ currPage }) => {
       <Image onClick={goToHome} cursor="pointer" src={dielLogo} h={{ base: '1rem', sm: '1.2rem', md: '1.8rem' }} />
       <Flex>
 
-        <Link href="/"><Text fontWeight={(currPage === 'tasks' ? 'bold' : 'none')} color="white" textAlign="center" p="14px 16px" textDecor="none" fontSize={{ base: '0.8rem', md: '1rem' }}>Tarefas</Text></Link>
-        <Link href="/historico"><Text fontWeight={(currPage === 'historic' ? 'bold' : 'none')} color="white" textAlign="center" p="14px 16px" textDecor="none" fontSize={{ base: '0.8rem', md: '1rem' }}>Histórico</Text></Link>
+        <Link to="/"><Text fontWeight={(currPage === 'tasks' ? 'bold' : 'none')} color="white" textAlign="center" p="14px 16px" textDecor="none" fontSize={{ base: '0.8rem', md: '1rem' }}>Tarefas</Text></Link>
+        <Link to="/historico"><Text fontWeight={(currPage === 'historic' ? 'bold' : 'none')} color="white" textAlign="center" p="14px 16px" textDecor="none" fontSize={{ base: '0.8rem', md: '1rem' }}>Histórico</Text></Link>
 
       </Flex>
     </Flex>
