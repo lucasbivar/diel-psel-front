@@ -6,6 +6,9 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { Header } from '../../components/Header';
 import './style.css';
 import { Task } from '../../components/Task';
@@ -14,12 +17,18 @@ import { getTasks } from '../../api';
 import { formatDate, formatTime } from '../../utils';
 
 export const Home = () => {
+  const [searchBarValue, setSearchBarValue] = useState('');
+
   const { data, isLoading } = useQuery(['todo'], async () => {
     const { tasks } = await getTasks();
 
     return tasks;
   }, {
     staleTime: 5000,
+    select: (searchBarValue !== '' ? (todos) => todos.filter(
+      (todo) => todo.title.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
+        .includes(searchBarValue.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')),
+    ) : null),
   });
 
   return (
@@ -42,7 +51,7 @@ export const Home = () => {
               >
                 <SearchIcon style={{ color: '#181842' }} />
               </InputLeftElement>
-              <Input borderColor="primary" border="2px" focusBorderColor="primary" type="tel" placeholder="Tarefa" />
+              <Input value={searchBarValue} onChange={(e) => setSearchBarValue(e.target.value)} borderColor="primary" border="2px" focusBorderColor="primary" placeholder="Tarefa" />
             </InputGroup>
             <Select width="28%" fontSize={{ base: '0.7rem', md: '1rem' }} color="white" focusBorderColor="primary" borderColor="primary" bg="primary">
               <option style={{ color: '#181842' }} value="filtro" selected>Filtro</option>
