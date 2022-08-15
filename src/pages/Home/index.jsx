@@ -22,24 +22,25 @@ import { formatDate, formatTime } from '../../utils';
 
 export const Home = () => {
   const [searchBarValue, setSearchBarValue] = useState('');
+  const [selectValue, setSelectValue] = useState('filter');
+  const [extraFilterValue, setExtraFilterValue] = useState('');
 
   const customFilter = () => {
-    if (searchBarValue !== '') {
-      return (todos) =>
-        todos.filter((todo) =>
-          todo.title
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/\p{Diacritic}/gu, '')
-            .includes(
-              searchBarValue
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/\p{Diacritic}/gu, ''),
-            ),
-        );
-    }
-    return null;
+    console.log(selectValue);
+    console.log(extraFilterValue);
+    return (todos) =>
+      todos.filter((todo) =>
+        todo.title
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .includes(
+            searchBarValue
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/\p{Diacritic}/gu, ''),
+          ),
+      );
   };
 
   const { data, isLoading } = useQuery(
@@ -91,21 +92,34 @@ export const Home = () => {
               focusBorderColor="primary"
               borderColor="primary"
               bg="primary"
+              onChange={(e) => setSelectValue(e.target.value)}
             >
-              <option style={{ color: '#181842' }} value="filtro" selected>
+              <option style={{ color: '#181842' }} value="filter" selected>
                 Filtro
               </option>
-              <option style={{ color: '#181842' }} value="dia">
+              <option style={{ color: '#181842' }} value="date">
                 Dia
               </option>
-              <option style={{ color: '#181842' }} value="semana">
+              <option style={{ color: '#181842' }} value="week">
                 Semana
               </option>
-              <option style={{ color: '#181842' }} value="mes">
+              <option style={{ color: '#181842' }} value="month">
                 Mês
               </option>
             </Select>
           </Flex>
+          {selectValue !== 'filter' ? (
+            <InputGroup width="100%">
+              <Input
+                borderColor="primary"
+                border="2px"
+                focusBorderColor="primary"
+                placeholder="A"
+                type={selectValue}
+                onChange={(e) => setExtraFilterValue(e.target.value)}
+              />
+            </InputGroup>
+          ) : null}
           {data?.filter(({ deleted }) => !deleted).length === 0 ? (
             <Flex width="100%" justify="center">
               <Heading fontSize={{ base: '0.9rem', md: '1.2rem' }}>
