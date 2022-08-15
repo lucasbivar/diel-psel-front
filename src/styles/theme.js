@@ -11,8 +11,7 @@ export const theme = extendTheme({
     error: '#E51247',
     white: '#FFFFFF',
     black: '',
-    brand:
-    {
+    brand: {
       500: '#181842',
       600: '#23225c',
     },
@@ -77,5 +76,4 @@ export const theme = extendTheme({
       },
     },
   },
-
 });

@@ -1,7 +1,17 @@
-/* eslint-disable import/no-cycle */
 import {
-  Box, Flex, Stack, Input, FormLabel, Textarea, FormControl,
-  Button, Select, HStack, Heading, FormErrorMessage, useToast,
+  Box,
+  Flex,
+  Stack,
+  Input,
+  FormLabel,
+  Textarea,
+  FormControl,
+  Button,
+  Select,
+  HStack,
+  Heading,
+  FormErrorMessage,
+  useToast,
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
@@ -19,13 +29,17 @@ export const Edit = () => {
   const toast = useToast();
   const { id } = useParams();
 
-  const { data: previousData, error: reqError } = useQuery(['edit-todo', { id }], async () => {
-    const { tasks } = await getTaskById(id);
+  const { data: previousData, error: reqError } = useQuery(
+    ['edit-todo', { id }],
+    async () => {
+      const { tasks } = await getTaskById(id);
 
-    return tasks;
-  }, {
-    staleTime: 5000,
-  });
+      return tasks;
+    },
+    {
+      staleTime: 5000,
+    },
+  );
 
   if (reqError) navigate('/error');
 
@@ -50,18 +64,16 @@ export const Edit = () => {
     }
   }, [previousData]);
 
-  const {
-    error,
-    isLoading,
-    isSuccess,
-    mutateAsync,
-  } = useMutation(async (task) => {
-    await editTask(id, task);
-  }, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['todo']);
+  const { error, isLoading, isSuccess, mutateAsync } = useMutation(
+    async (task) => {
+      await editTask(id, task);
     },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['todo']);
+      },
+    },
+  );
 
   if (isSuccess) {
     const idToastSuccess = 'success';
@@ -97,7 +109,6 @@ export const Edit = () => {
     await mutateAsync(data);
   };
   return (
-
     <Box min-width="100vw">
       <Header />
       <Flex
@@ -123,12 +134,9 @@ export const Edit = () => {
               placeholder="Digite o título da tarefa"
               {...register('title')}
             />
-            {errors.title
-              && (
-              <FormErrorMessage>
-                {errors.title.message}
-              </FormErrorMessage>
-              )}
+            {errors.title && (
+              <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl isInvalid={errors.date}>
             <FormLabel htmlFor="date">Data:</FormLabel>
@@ -138,12 +146,9 @@ export const Edit = () => {
               focusBorderColor={errors.date ? 'red.500' : 'primary'}
               {...register('date')}
             />
-            {errors.date
-              && (
-              <FormErrorMessage>
-                {errors.date.message}
-              </FormErrorMessage>
-              )}
+            {errors.date && (
+              <FormErrorMessage>{errors.date.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.time}>
@@ -154,12 +159,9 @@ export const Edit = () => {
               type="time"
               {...register('time')}
             />
-            {errors.time
-              && (
-              <FormErrorMessage>
-                {errors.time.message}
-              </FormErrorMessage>
-              )}
+            {errors.time && (
+              <FormErrorMessage>{errors.time.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.hour}>
@@ -170,14 +172,15 @@ export const Edit = () => {
               placeholder="Quantidade de Horas"
               {...register('hour')}
             >
-              {[...Array(25)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+              {[...Array(25)].map((x, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
             </Select>
-            {errors.hour
-              && (
-              <FormErrorMessage>
-                {errors.hour.message}
-              </FormErrorMessage>
-              )}
+            {errors.hour && (
+              <FormErrorMessage>{errors.hour.message}</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl isInvalid={errors.minute}>
             <FormLabel htmlFor="hour" />
@@ -187,15 +190,16 @@ export const Edit = () => {
               focusBorderColor={errors.minute ? 'red.500' : 'primary'}
               placeholder="Quantidade de Minutos"
             >
-              {[...Array(60)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+              {[...Array(60)].map((x, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
             </Select>
 
-            {errors.minute
-              && (
-              <FormErrorMessage>
-                {errors.minute.message}
-              </FormErrorMessage>
-              )}
+            {errors.minute && (
+              <FormErrorMessage>{errors.minute.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.description}>
@@ -207,12 +211,9 @@ export const Edit = () => {
               focusBorderColor={errors.description ? 'red.500' : 'primary'}
               placeholder="Descreva a sua tarefa"
             />
-            {errors.description
-              && (
-              <FormErrorMessage>
-                {errors.description.message}
-              </FormErrorMessage>
-              )}
+            {errors.description && (
+              <FormErrorMessage>{errors.description.message}</FormErrorMessage>
+            )}
           </FormControl>
           <HStack width="100%">
             <Button
@@ -222,14 +223,18 @@ export const Edit = () => {
               colorScheme="brand"
             >
               Salvar
-
             </Button>
 
-            <Button onClick={() => navigate(-1)} width="30%" colorScheme="brand">Voltar</Button>
+            <Button
+              onClick={() => navigate(-1)}
+              width="30%"
+              colorScheme="brand"
+            >
+              Voltar
+            </Button>
           </HStack>
         </Stack>
       </Flex>
     </Box>
-
   );
 };

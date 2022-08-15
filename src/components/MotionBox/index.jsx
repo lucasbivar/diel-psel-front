@@ -1,11 +1,12 @@
 import { chakra } from '@chakra-ui/react';
 import { isValidMotionProp, motion } from 'framer-motion';
+import React from 'react';
 
 const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || prop === 'children',
 });
 
-export function MotionBox({ children, ...rest }) {
+export const MotionBox = ({ children, ...rest }) => {
   return (
     <ChakraBox
       initial={{ x: -700, opacity: 0 }}
@@ -20,6 +21,5 @@ export function MotionBox({ children, ...rest }) {
     >
       {children}
     </ChakraBox>
-
   );
-}
+};

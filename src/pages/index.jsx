@@ -5,10 +5,10 @@ import { Edit } from './Edit';
 import { Error } from './Error';
 import { Historic } from './Historic';
 import { Home } from './Home';
+import React from 'react';
 
-export function MainRoutes() {
+export const MainRoutes = () => {
   return (
-
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/criar" element={<Create />} />
@@ -17,6 +17,5 @@ export function MainRoutes() {
       <Route path="/historico" element={<Historic />} />
       <Route path="/*" element={<Error />} />
     </Routes>
-
   );
-}
+};

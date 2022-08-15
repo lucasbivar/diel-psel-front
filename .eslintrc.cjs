@@ -3,11 +3,9 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
+    es6: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  extends: ['plugin:react/recommended', 'prettier'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -15,24 +13,9 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react', 'prettier'],
   rules: {
-    'import/extensions': 'off',
-    'import/no-unresolved': 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'react/jsx-filename-extension': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'import/prefer-default-export': 'off',
-    'react/function-component-definition': 'off',
-    'linebreak-style': 0,
-    'react/no-array-index-key': 'off',
-    'arrow-body-style': 'off',
-    'react/jsx-no-constructed-context-values': 'off',
-    'import/no-extraneous-dependencies': 'off',
-    'no-unused-vars': 'off',
+    'prettier/prettier': 'error',
     'react/prop-types': 'off',
-
   },
 };

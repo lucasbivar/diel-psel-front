@@ -31,7 +31,7 @@ export const editTaskStatus = async (id, params = {}) => {
 export const editTask = async (id, params = {}) => {
   const taskData = params;
 
-  taskData.duration = (taskData.hour * 60) + taskData.minute;
+  taskData.duration = taskData.hour * 60 + taskData.minute;
 
   const date = new Date(`${taskData.date}T${taskData.time}`);
   taskData.dateTime = date;
@@ -49,7 +49,7 @@ export const editTask = async (id, params = {}) => {
 export const createTask = async (params = {}) => {
   const taskData = params;
 
-  taskData.duration = (taskData.hour * 60) + taskData.minute;
+  taskData.duration = taskData.hour * 60 + taskData.minute;
   const date = new Date(`${taskData.date}T${taskData.time}:00`);
   taskData.dateTime = date;
 

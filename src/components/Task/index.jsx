@@ -1,7 +1,13 @@
-/* eslint-disable import/no-cycle */
 /* eslint-disable no-return-await */
 import {
-  Checkbox, Flex, Heading, IconButton, Text, Box, useQuery, useToast,
+  Checkbox,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  Box,
+  useQuery,
+  useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,13 +20,18 @@ import { useNavigate } from 'react-router-dom';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { MotionBox } from '../MotionBox';
-import {
-  deleteTask, editTask, editTaskStatus, getTaskById,
-} from '../../api';
+import { deleteTask, editTask, editTaskStatus, getTaskById } from '../../api';
 import { queryClient } from '../../main';
 
 export const Task = ({
-  title, description, date, deleted, time, duration, status, id,
+  title,
+  description,
+  date,
+  deleted,
+  time,
+  duration,
+  status,
+  id,
 }) => {
   const navigate = useNavigate();
   const goToEdit = () => {
@@ -28,12 +39,16 @@ export const Task = ({
   };
 
   const handlePrefetchTask = async (taskID) => {
-    return await queryClient.prefetchQuery(['todo', { id: taskID }], async () => {
-      const { tasks } = await getTaskById(taskID);
-      return tasks;
-    }, {
-      staleTime: 1000 * 60 * 10, // 10 minutes
-    });
+    return await queryClient.prefetchQuery(
+      ['todo', { id: taskID }],
+      async () => {
+        const { tasks } = await getTaskById(taskID);
+        return tasks;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutes
+      },
+    );
   };
   const goToDetails = () => {
     navigate(`/detalhes/${id}`);
@@ -42,7 +57,7 @@ export const Task = ({
   const toast = useToast();
   const [done, setDone] = useState(status === 'Done');
   const handleStatus = async () => {
-    await editTaskStatus(id, { status: (status === 'Done' ? 'ToDo' : 'Done') });
+    await editTaskStatus(id, { status: status === 'Done' ? 'ToDo' : 'Done' });
     queryClient.invalidateQueries('todo');
     if (!done) {
       const idToastDone = 'done';
@@ -122,13 +137,22 @@ export const Task = ({
       <Flex
         cursor="pointer"
         py={{
-          base: '4rem', md: '4rem', lg: '1rem', nb: '1rem',
+          base: '4rem',
+          md: '4rem',
+          lg: '1rem',
+          nb: '1rem',
         }}
         height={{
-          base: '140px', md: '100px', lg: '80px', nb: '80px',
+          base: '140px',
+          md: '100px',
+          lg: '80px',
+          nb: '80px',
         }}
         width={{
-          base: '17rem', md: '23rem', lg: '30rem', nb: '40rem',
+          base: '17rem',
+          md: '23rem',
+          lg: '30rem',
+          nb: '40rem',
         }}
         align="center"
         justify="space-between"
@@ -146,69 +170,105 @@ export const Task = ({
               as="h2"
               marginBottom="0.2rem"
               fontSize={{
-                base: '0.9rem', lg: '1rem', nb: '1rem',
+                base: '0.9rem',
+                lg: '1rem',
+                nb: '1rem',
               }}
-              textDecoration={(done && !deleted) ? 'line-through' : null}
+              textDecoration={done && !deleted ? 'line-through' : null}
             >
               {title}
-
             </Heading>
-            <Flex direction={{ base: 'column', lg: 'row' }} justify="space-between" width="100%">
+            <Flex
+              direction={{ base: 'column', lg: 'row' }}
+              justify="space-between"
+              width="100%"
+            >
               <Flex align="center">
                 <CalendarMonthIcon style={{ width: '1.3rem' }} />
-                <Text marginLeft="0.2rem" fontSize={{ base: '0.9rem', lg: '1rem' }}>{date}</Text>
+                <Text
+                  marginLeft="0.2rem"
+                  fontSize={{ base: '0.9rem', lg: '1rem' }}
+                >
+                  {date}
+                </Text>
               </Flex>
               <Flex align="center">
                 <ScheduleIcon style={{ width: '1.3rem' }} />
-                <Text marginLeft="0.2rem" fontSize={{ base: '0.9rem', lg: '1rem' }}>{time}</Text>
+                <Text
+                  marginLeft="0.2rem"
+                  fontSize={{ base: '0.9rem', lg: '1rem' }}
+                >
+                  {time}
+                </Text>
               </Flex>
               <Flex align="center">
                 <AlarmIcon style={{ width: '1.3rem' }} />
-                <Text marginLeft="0.2rem" fontSize={{ base: '0.9rem', lg: '1rem' }}>{duration}</Text>
+                <Text
+                  marginLeft="0.2rem"
+                  fontSize={{ base: '0.9rem', lg: '1rem' }}
+                >
+                  {duration}
+                </Text>
               </Flex>
             </Flex>
-
           </Flex>
-
         </Flex>
-        <Flex justify="space-between" align="center" direction={{ base: 'column', lg: 'row' }} width={deleted ? '5%' : '20%'}>
-          {deleted ? (<IconButton _hover={{ backgroundColor: 'transparent' }} onClick={handleRecovery} size="sm" bgColor="transparent" icon={<ReplayIcon style={{ color: '#181842' }} />} />)
-            : (
-              <>
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleStatus();
-                  }}
-                  _hover={{ backgroundColor: 'transparent' }}
-                  size="sm"
-                  width="1rem"
-                  bgColor="transparent"
-                  icon={done ? <CheckBoxIcon style={{ color: 'green' }} /> : <CheckBoxOutlineBlankIcon style={{ color: '#181842' }} />}
-                />
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToEdit();
-                  }}
-                  _hover={{ backgroundColor: 'transparent' }}
-                  size="sm"
-                  width="1rem"
-                  bgColor="transparent"
-                  icon={<EditIcon style={{ color: '#181842' }} />}
-                />
-                <IconButton
-                  _hover={{ backgroundColor: 'transparent' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                  }}
-                  size="sm"
-                  bgColor="transparent"
-                  icon={<DeleteIcon style={{ color: '#181842' }} />}
-                />
-              </>
-            )}
+        <Flex
+          justify="space-between"
+          align="center"
+          direction={{ base: 'column', lg: 'row' }}
+          width={deleted ? '5%' : '20%'}
+        >
+          {deleted ? (
+            <IconButton
+              _hover={{ backgroundColor: 'transparent' }}
+              onClick={handleRecovery}
+              size="sm"
+              bgColor="transparent"
+              icon={<ReplayIcon style={{ color: '#181842' }} />}
+            />
+          ) : (
+            <>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleStatus();
+                }}
+                _hover={{ backgroundColor: 'transparent' }}
+                size="sm"
+                width="1rem"
+                bgColor="transparent"
+                icon={
+                  done ? (
+                    <CheckBoxIcon style={{ color: 'green' }} />
+                  ) : (
+                    <CheckBoxOutlineBlankIcon style={{ color: '#181842' }} />
+                  )
+                }
+              />
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToEdit();
+                }}
+                _hover={{ backgroundColor: 'transparent' }}
+                size="sm"
+                width="1rem"
+                bgColor="transparent"
+                icon={<EditIcon style={{ color: '#181842' }} />}
+              />
+              <IconButton
+                _hover={{ backgroundColor: 'transparent' }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                size="sm"
+                bgColor="transparent"
+                icon={<DeleteIcon style={{ color: '#181842' }} />}
+              />
+            </>
+          )}
         </Flex>
       </Flex>
     </MotionBox>

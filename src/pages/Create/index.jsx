@@ -1,7 +1,17 @@
-/* eslint-disable import/no-cycle */
 import {
-  Box, Flex, Stack, Input, FormLabel, Textarea, FormControl,
-  Button, Select, HStack, Heading, FormErrorMessage, useToast,
+  Box,
+  Flex,
+  Stack,
+  Input,
+  FormLabel,
+  Textarea,
+  FormControl,
+  Button,
+  Select,
+  HStack,
+  Heading,
+  FormErrorMessage,
+  useToast,
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
@@ -40,18 +50,16 @@ export const Create = () => {
 
   const navigate = useNavigate();
 
-  const {
-    error,
-    isLoading,
-    isSuccess,
-    mutateAsync,
-  } = useMutation(async (task) => {
-    await createTask(task);
-  }, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['todo']);
+  const { error, isLoading, isSuccess, mutateAsync } = useMutation(
+    async (task) => {
+      await createTask(task);
     },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['todo']);
+      },
+    },
+  );
 
   const onSubmit = async (data) => {
     await mutateAsync(data);
@@ -90,7 +98,6 @@ export const Create = () => {
   }
 
   return (
-
     <Box min-width="100vw">
       <Header />
       <Flex
@@ -116,12 +123,9 @@ export const Create = () => {
               placeholder="Digite o título da tarefa"
               {...register('title')}
             />
-            {errors.title
-              && (
-              <FormErrorMessage>
-                {errors.title.message}
-              </FormErrorMessage>
-              )}
+            {errors.title && (
+              <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl isInvalid={errors.date}>
             <FormLabel htmlFor="date">Data:</FormLabel>
@@ -132,12 +136,9 @@ export const Create = () => {
               min={getCurrentDate()}
               {...register('date')}
             />
-            {errors.date
-              && (
-              <FormErrorMessage>
-                {errors.date.message}
-              </FormErrorMessage>
-              )}
+            {errors.date && (
+              <FormErrorMessage>{errors.date.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.time}>
@@ -149,12 +150,9 @@ export const Create = () => {
               type="time"
               {...register('time')}
             />
-            {errors.time
-              && (
-              <FormErrorMessage>
-                {errors.time.message}
-              </FormErrorMessage>
-              )}
+            {errors.time && (
+              <FormErrorMessage>{errors.time.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.hour}>
@@ -165,14 +163,15 @@ export const Create = () => {
               placeholder="Quantidade de Horas"
               {...register('hour')}
             >
-              {[...Array(25)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+              {[...Array(25)].map((x, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
             </Select>
-            {errors.hour
-              && (
-              <FormErrorMessage>
-                {errors.hour.message}
-              </FormErrorMessage>
-              )}
+            {errors.hour && (
+              <FormErrorMessage>{errors.hour.message}</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl isInvalid={errors.minute}>
             <FormLabel htmlFor="hour" />
@@ -182,15 +181,16 @@ export const Create = () => {
               focusBorderColor={errors.minute ? 'red.500' : 'primary'}
               placeholder="Quantidade de Minutos"
             >
-              {[...Array(60)].map((x, i) => <option key={i} value={i}>{i}</option>)}
+              {[...Array(60)].map((x, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
             </Select>
 
-            {errors.minute
-              && (
-              <FormErrorMessage>
-                {errors.minute.message}
-              </FormErrorMessage>
-              )}
+            {errors.minute && (
+              <FormErrorMessage>{errors.minute.message}</FormErrorMessage>
+            )}
           </FormControl>
 
           <FormControl isInvalid={errors.description}>
@@ -202,12 +202,9 @@ export const Create = () => {
               focusBorderColor={errors.description ? 'red.500' : 'primary'}
               placeholder="Descreva a sua tarefa"
             />
-            {errors.description
-              && (
-              <FormErrorMessage>
-                {errors.description.message}
-              </FormErrorMessage>
-              )}
+            {errors.description && (
+              <FormErrorMessage>{errors.description.message}</FormErrorMessage>
+            )}
           </FormControl>
           <HStack width="100%">
             <Button
@@ -217,14 +214,18 @@ export const Create = () => {
               colorScheme="brand"
             >
               Criar Tarefa
-
             </Button>
 
-            <Button onClick={() => navigate('/')} width="30%" colorScheme="brand">Voltar</Button>
+            <Button
+              onClick={() => navigate('/')}
+              width="30%"
+              colorScheme="brand"
+            >
+              Voltar
+            </Button>
           </HStack>
         </Stack>
       </Flex>
     </Box>
-
   );
 };
