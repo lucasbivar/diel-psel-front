@@ -20,7 +20,7 @@ import {
 import { queryClient } from '../../main';
 
 export const Task = ({
-  title, description, date, time, duration, status, id,
+  title, description, date, deleted, time, duration, status, id,
 }) => {
   const navigate = useNavigate();
   const goToEdit = () => {
@@ -91,7 +91,7 @@ export const Task = ({
   };
 
   const handleRecovery = async () => {
-    await editTaskStatus(id, { status: 'ToDo' });
+    await editTaskStatus(id, { deleted: false });
 
     const idToastSuccess = 'success';
     if (!toast.isActive(idToastSuccess)) {
@@ -109,7 +109,7 @@ export const Task = ({
   };
 
   const getBorderColor = () => {
-    if (status === 'Deleted') {
+    if (deleted) {
       return '18px solid #C90000';
     }
     if (done) {
@@ -137,8 +137,8 @@ export const Task = ({
         borderLeft={getBorderColor()}
         boxShadow="2px 0px 8px 2px rgba(0,0,0,0.16)"
         _hover={{ backgroundColor: '#f5f5f5' }}
-        onClick={status !== 'Deleted' ? goToDetails : null}
-        onMouseEnter={() => (status !== 'Deleted' ? handlePrefetchTask(id) : null)}
+        onClick={!deleted ? goToDetails : null}
+        onMouseEnter={() => (!deleted ? handlePrefetchTask(id) : null)}
       >
         <Flex width="70%" justify="space-between">
           <Flex direction="column" width="100%">
@@ -148,7 +148,7 @@ export const Task = ({
               fontSize={{
                 base: '0.9rem', lg: '1rem', nb: '1rem',
               }}
-              textDecoration={done ? 'line-through' : null}
+              textDecoration={(done && !deleted) ? 'line-through' : null}
             >
               {title}
 
@@ -171,8 +171,8 @@ export const Task = ({
           </Flex>
 
         </Flex>
-        <Flex justify="space-between" align="center" direction={{ base: 'column', lg: 'row' }} width={status === 'Deleted' ? '5%' : '20%'}>
-          {status === 'Deleted' ? (<IconButton _hover={{ backgroundColor: 'transparent' }} onClick={handleRecovery} size="sm" bgColor="transparent" icon={<ReplayIcon style={{ color: '#181842' }} />} />)
+        <Flex justify="space-between" align="center" direction={{ base: 'column', lg: 'row' }} width={deleted ? '5%' : '20%'}>
+          {deleted ? (<IconButton _hover={{ backgroundColor: 'transparent' }} onClick={handleRecovery} size="sm" bgColor="transparent" icon={<ReplayIcon style={{ color: '#181842' }} />} />)
             : (
               <>
                 <IconButton

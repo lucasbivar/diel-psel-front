@@ -32,7 +32,8 @@ export const editTask = async (id, params = {}) => {
   const taskData = params;
 
   taskData.duration = (taskData.hour * 60) + taskData.minute;
-  const date = new Date(`${taskData.date}T${taskData.time}:00`);
+
+  const date = new Date(`${taskData.date}T${taskData.time}`);
   taskData.dateTime = date;
 
   delete taskData.hour;

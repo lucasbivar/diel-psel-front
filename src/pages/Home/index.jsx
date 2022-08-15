@@ -11,6 +11,7 @@ import './style.css';
 import { Task } from '../../components/Task';
 import { MotionBox } from '../../components/MotionBox';
 import { getTasks } from '../../api';
+import { formatDate, formatTime } from '../../utils';
 
 export const Home = () => {
   const { data, isLoading } = useQuery(['todo'], async () => {
@@ -51,28 +52,29 @@ export const Home = () => {
             </Select>
           </Flex>
           {data?.filter(({
-            status,
-          }) => status !== 'Deleted').length === 0 ? (
+            deleted,
+          }) => !deleted).length === 0 ? (
             <Flex width="100%" justify="center">
               <Heading fontSize={{ base: '0.9rem', md: '1.2rem' }}>Ainda Não Foi Criada Nenhuma Tarefa</Heading>
             </Flex>
             ) : null }
 
           {data?.filter(({
-            status,
-          }) => status !== 'Deleted').map(({
-            title, description, _id, date, time, durationToString, status,
+            deleted,
+          }) => !deleted).map(({
+            title, description, _id, dateTime, deleted, durationToString, status,
           }) => {
             return (
               <Task
                 title={title}
                 description={description}
-                date={date}
-                time={time}
+                date={formatDate(dateTime)}
+                time={formatTime(dateTime)}
                 duration={durationToString}
                 id={_id}
                 status={status}
                 key={_id}
+                deleted={deleted}
               />
             );
           })}

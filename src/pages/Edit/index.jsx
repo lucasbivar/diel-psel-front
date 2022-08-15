@@ -12,6 +12,7 @@ import { editTask, getTaskById } from '../../api';
 import { Header } from '../../components/Header';
 import { queryClient } from '../../main';
 import { createTaskSchema } from '../../validation/taskSchema';
+import { formatDate, formatTime } from '../../utils';
 
 export const Edit = () => {
   const navigate = useNavigate();
@@ -43,9 +44,9 @@ export const Edit = () => {
       setValue('description', previousData.description);
       setValue('minute', previousData.duration % 60);
       setValue('hour', Math.floor(previousData.duration / 60));
-      const [day, month, year] = previousData.date.split('-');
+      const [day, month, year] = formatDate(previousData.dateTime).split('-');
       setValue('date', `${year}-${month}-${day}`);
-      setValue('time', `${previousData.time}:00`);
+      setValue('time', `${formatTime(previousData.dateTime)}:00`);
     }
   }, [previousData]);
 
@@ -224,7 +225,7 @@ export const Edit = () => {
 
             </Button>
 
-            <Button onClick={() => navigate('/')} width="30%" colorScheme="brand">Voltar</Button>
+            <Button onClick={() => navigate(-1)} width="30%" colorScheme="brand">Voltar</Button>
           </HStack>
         </Stack>
       </Flex>

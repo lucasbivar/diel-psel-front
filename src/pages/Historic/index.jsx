@@ -23,12 +23,12 @@ export const Historic = () => {
       <Flex justify="center" min-width="100vw" minHeight="calc(100vh - 60px)">
         <Stack spacing="16px" paddingBottom="30px">
           {(data?.filter(({
-            status,
-          }) => status === 'Deleted').length === 0) ? <Heading fontSize={{ base: '1rem', md: '1.2rem' }}>Nenhuma Tarefa Foi Deletada :)</Heading>
+            deleted,
+          }) => deleted).length === 0) ? <Heading fontSize={{ base: '1rem', md: '1.2rem' }}>Nenhuma Tarefa Foi Deletada :)</Heading>
             : data?.filter(({
-              status,
-            }) => status === 'Deleted').map(({
-              title, description, _id, date, time, durationToString, status,
+              deleted,
+            }) => deleted).map(({
+              title, description, _id, date, deleted, time, durationToString, status,
             }) => {
               return (
                 <Task
@@ -40,6 +40,7 @@ export const Historic = () => {
                   id={_id}
                   status={status}
                   key={_id}
+                  deleted={deleted}
                 />
               );
             })}
