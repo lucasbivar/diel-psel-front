@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Header } from '../../components/Header';
 import { Task } from '../../components/Task';
 import { getTasks } from '../../api';
+import { formatDate, formatTime } from '../../utils';
 
 export const Historic = () => {
   const { data, isLoading } = useQuery(['historic'], async () => {
@@ -27,15 +28,21 @@ export const Historic = () => {
           }) => deleted).length === 0) ? <Heading fontSize={{ base: '1rem', md: '1.2rem' }}>Nenhuma Tarefa Foi Deletada :)</Heading>
             : data?.filter(({
               deleted,
-            }) => deleted).map(({
-              title, description, _id, date, deleted, time, durationToString, status,
+            }) => deleted).sort((a, b) => {
+              const keyA = new Date(a.deletedTime); const
+                keyB = new Date(b.deletedTime);
+              if (keyA < keyB) return 1;
+              if (keyA > keyB) return -1;
+              return 0;
+            }).map(({
+              title, description, _id, dateTime, deleted, durationToString, status,
             }) => {
               return (
                 <Task
                   title={title}
                   description={description}
-                  date={date}
-                  time={time}
+                  date={formatDate(dateTime)}
+                  time={formatTime(dateTime)}
                   duration={durationToString}
                   id={_id}
                   status={status}
