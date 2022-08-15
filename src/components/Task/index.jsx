@@ -32,6 +32,7 @@ export const Task = ({
   duration,
   status,
   id,
+  isSearching,
 }) => {
   const navigate = useNavigate();
   const goToEdit = () => {
@@ -133,7 +134,7 @@ export const Task = ({
     return '18px solid #181842';
   };
   return (
-    <MotionBox>
+    <MotionBox isSearching={isSearching}>
       <Flex
         cursor="pointer"
         py={{

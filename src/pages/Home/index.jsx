@@ -137,6 +137,7 @@ export const Home = () => {
                     status={status}
                     key={_id}
                     deleted={deleted}
+                    isSearching={searchBarValue === '' ? false : true}
                   />
                 );
               },

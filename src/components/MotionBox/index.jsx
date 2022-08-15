@@ -6,10 +6,10 @@ const ChakraBox = chakra(motion.div, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || prop === 'children',
 });
 
-export const MotionBox = ({ children, ...rest }) => {
+export const MotionBox = ({ children, isSearching, ...rest }) => {
   return (
     <ChakraBox
-      initial={{ x: -700, opacity: 0 }}
+      initial={{ x: isSearching ? 0 : -700, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -700, opacity: 0 }}
       // @ts-ignore no problem in operation, although type error appears.
