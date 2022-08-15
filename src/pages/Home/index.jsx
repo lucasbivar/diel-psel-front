@@ -29,18 +29,26 @@ export const Home = () => {
     console.log(selectValue);
     console.log(extraFilterValue);
     return (todos) =>
-      todos.filter((todo) =>
-        todo.title
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/\p{Diacritic}/gu, '')
-          .includes(
-            searchBarValue
-              .toLowerCase()
-              .normalize('NFD')
-              .replace(/\p{Diacritic}/gu, ''),
-          ),
-      );
+      todos
+        .filter((todo) =>
+          todo.title
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+            .includes(
+              searchBarValue
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/\p{Diacritic}/gu, ''),
+            ),
+        )
+        .sort((a, b) => {
+          const keyA = new Date(a.dateTime);
+          const keyB = new Date(b.dateTime);
+          if (keyA < keyB) return 1;
+          if (keyA > keyB) return -1;
+          return 0;
+        });
   };
 
   const { data, isLoading } = useQuery(
