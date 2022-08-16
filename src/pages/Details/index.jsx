@@ -15,7 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/Header';
 import { getTaskById } from '../../api';
-import { formatTime } from '../../utils';
+import { formatDate, formatTime } from '../../utils';
 
 export const Details = (props) => {
   const { id } = useParams();
@@ -46,7 +46,7 @@ export const Details = (props) => {
           <Flex align="center">
             <CalendarMonthIcon style={{ width: '1.3rem' }} />
             <Text marginLeft="0.2rem" fontSize={{ base: '0.9rem', lg: '1rem' }}>
-              {data?.date}
+              {data ? formatDate(data.dateTime) : ''}
             </Text>
           </Flex>
           <Flex align="center">

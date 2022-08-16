@@ -19,15 +19,35 @@ import { Task } from '../../components/Task';
 import { MotionBox } from '../../components/MotionBox';
 import { getTasks } from '../../api';
 import { formatDate, formatTime } from '../../utils';
+import { DateTime } from 'luxon';
 
 export const Home = () => {
   const [searchBarValue, setSearchBarValue] = useState('');
   const [selectValue, setSelectValue] = useState('filter');
   const [extraFilterValue, setExtraFilterValue] = useState('');
 
-  const customFilter = () => {
-    console.log(selectValue);
-    console.log(extraFilterValue);
+  const cmpDate = (dateTime) => {
+    const [day, month, year] = formatDate(dateTime).split('-');
+    return extraFilterValue === `${year}-${month}-${day}`;
+  };
+
+  const cmpMonth = (dateTime) => {
+    const [day, month, year] = formatDate(dateTime).split('-');
+    return extraFilterValue === `${year}-${month}`;
+  };
+
+  const cmpWeek = (dateTime) => {
+    const date = new Date(dateTime);
+    const [day, month, year] = formatDate(dateTime).split('-');
+    const week = DateTime.fromJSDate(date).weekNumber;
+    return extraFilterValue === `${year}-W${week}`;
+  };
+
+  const alwaysTrue = (dateTime) => {
+    return true;
+  };
+
+  const customFilterBase = (func) => {
     return (todos) =>
       todos
         .filter((todo) =>
@@ -48,7 +68,23 @@ export const Home = () => {
           if (keyA < keyB) return 1;
           if (keyA > keyB) return -1;
           return 0;
-        });
+        })
+        .filter((todo) => func(todo.dateTime));
+  };
+
+  const customFilter = () => {
+    // console.log(selectValue);
+    // console.log(extraFilterValue);
+
+    if (selectValue === 'date' && extraFilterValue) {
+      return customFilterBase(cmpDate);
+    } else if (selectValue === 'week' && extraFilterValue) {
+      return customFilterBase(cmpWeek);
+    } else if (selectValue === 'month' && extraFilterValue) {
+      return customFilterBase(cmpMonth);
+    }
+
+    return customFilterBase(alwaysTrue);
   };
 
   const { data, isLoading } = useQuery(
@@ -100,9 +136,13 @@ export const Home = () => {
               focusBorderColor="primary"
               borderColor="primary"
               bg="primary"
-              onChange={(e) => setSelectValue(e.target.value)}
+              onChange={(e) => {
+                setExtraFilterValue(null);
+                setSelectValue(e.target.value);
+              }}
+              defaultValue="filter"
             >
-              <option style={{ color: '#181842' }} value="filter" selected>
+              <option style={{ color: '#181842' }} value="filter">
                 Filtro
               </option>
               <option style={{ color: '#181842' }} value="date">
@@ -122,7 +162,6 @@ export const Home = () => {
                 borderColor="primary"
                 border="2px"
                 focusBorderColor="primary"
-                placeholder="A"
                 type={selectValue}
                 onChange={(e) => setExtraFilterValue(e.target.value)}
               />
@@ -131,7 +170,7 @@ export const Home = () => {
           {data?.filter(({ deleted }) => !deleted).length === 0 ? (
             <Flex width="100%" justify="center">
               <Heading fontSize={{ base: '0.9rem', md: '1.2rem' }}>
-                Ainda Não Foi Criada Nenhuma Tarefa
+                Nenhuma Tarefa
               </Heading>
             </Flex>
           ) : null}
