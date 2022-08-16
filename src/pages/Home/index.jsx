@@ -202,7 +202,7 @@ export const Home = () => {
 
         <MotionBox>
           <Link
-            to="/criar"
+            href="/criar"
             position="fixed"
             right={{ base: '2rem', '2xl': '4rem' }}
             bottom={{ base: '2rem', '2xl': '3rem' }}
