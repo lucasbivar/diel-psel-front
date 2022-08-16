@@ -65,8 +65,8 @@ export const Home = () => {
         .sort((a, b) => {
           const keyA = new Date(a.dateTime);
           const keyB = new Date(b.dateTime);
-          if (keyA < keyB) return 1;
-          if (keyA > keyB) return -1;
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
           return 0;
         })
         .filter((todo) => func(todo.dateTime));
