@@ -73,9 +73,6 @@ export const Home = () => {
   };
 
   const customFilter = () => {
-    // console.log(selectValue);
-    // console.log(extraFilterValue);
-
     if (selectValue === 'date' && extraFilterValue) {
       return customFilterBase(cmpDate);
     } else if (selectValue === 'week' && extraFilterValue) {
@@ -198,7 +195,6 @@ export const Home = () => {
                     status={status}
                     key={_id}
                     deleted={deleted}
-                    isSearching={searchBarValue === '' ? false : true}
                   />
                 );
               },
