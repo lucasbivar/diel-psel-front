@@ -7,6 +7,7 @@
     <h4>
         Front-end do desafio técnico do processo seletivo de estágio na Diel Energia
     </h4> 
+    
 </div>
 
 ---
@@ -23,6 +24,8 @@
 ## Sobre o projeto
 
 <sup>[Voltar ao topo](#conteudos)</sup><br>
+
+Vídeo gravado demonstrando à aplicação: https://loom.com/share/41eaee32c1894ce4aadd7675a4615889
 
 O objetivo do desafio técnico é construir o back-end e o front-end de uma SPA de calendário de tarefas do dia utilizando uma stack que você sinta confortável, pensando sempre em performance, segurança e escalabilidade. O presente repositório contém o código e informações acerca do Front-end da aplicação, para acessar o repositório do Back-end clique [aqui](https://github.com/lucasbivar/diel-psel-back).
 
