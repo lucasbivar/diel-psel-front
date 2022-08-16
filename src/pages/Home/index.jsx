@@ -7,14 +7,13 @@ import {
   InputLeftElement,
   Select,
   Stack,
+  Link,
 } from '@chakra-ui/react';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Header } from '../../components/Header';
-import './style.css';
 import { Task } from '../../components/Task';
 import { MotionBox } from '../../components/MotionBox';
 import { getTasks } from '../../api';
@@ -202,8 +201,22 @@ export const Home = () => {
         </Stack>
 
         <MotionBox>
-          <Link to="/criar" id="addBtn">
-            <AddIcon id="addIcon" />
+          <Link
+            to="/criar"
+            position="fixed"
+            right={{ base: '2rem', '2xl': '4rem' }}
+            bottom={{ base: '2rem', '2xl': '3rem' }}
+            display="block"
+            height={{ base: '45px', lg: '55px' }}
+            width={{ base: '45px', lg: '55px' }}
+            borderRadius="50%"
+            backgroundColor="#181842"
+            textAlign="center"
+            paddingTop={{ base: '10px', lg: '16px' }}
+            boxShadow="16px 16px 46px -6px #000000"
+            _hover={{ backgroundColor: '#0b0b35', marginBottom: '3px' }}
+          >
+            <AddIcon style={{ color: 'white' }} />
           </Link>
         </MotionBox>
       </Flex>
