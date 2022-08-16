@@ -28,10 +28,11 @@ O objetivo do desafio técnico é construir o back-end e o front-end de uma SPA 
 
 Para ver o funcionamento do Back-end e do Front-end não é necessário rodar o código na sua máquina, uma vez que ambos já estão hospedados (Se tiver interesse em rodar, siga o [tutorial](#como-rodar-na-sua-máquina) no fim do README). Links do resultado final do desafio já hospedado:
 
-- Back-end: 
-  - https://task-back-diel.herokuapp.com/api/task
 - Front-end (Aplicação final para usuário comum): 
   - https://diel-psel-front.vercel.app/
+  
+- Back-end: 
+  - https://task-back-diel.herokuapp.com/api/task
 
 ---
 
